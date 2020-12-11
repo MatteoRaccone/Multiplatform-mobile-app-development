@@ -16,7 +16,7 @@ export const fetchComments = () => (dispatch) => {
             var errmess = new Error(error.message);
             throw errmess;
       })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(comments => dispatch(addComments(comments)))
     .catch(error => dispatch(commentsFailed(error.message)));
 };
@@ -49,7 +49,7 @@ export const fetchDishes = () => (dispatch) => {
             var errmess = new Error(error.message);
             throw errmess;
       })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(dishes => dispatch(addDishes(dishes)))
     .catch(error => dispatch(dishesFailed(error.message)));
 };
@@ -86,7 +86,7 @@ export const fetchPromos = () => (dispatch) => {
             var errmess = new Error(error.message);
             throw errmess;
         })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(promos => dispatch(addPromos(promos)))
     .catch(error => dispatch(promosFailed(error.message)));
 };
@@ -123,7 +123,7 @@ export const fetchLeaders = () => (dispatch) => {
             var errmess = new Error(error.message);
             throw errmess;
         })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(leaders => dispatch(addLeaders(leaders)))
     .catch(error => dispatch(leadersFailed(error.message)));
 };

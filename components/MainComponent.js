@@ -10,11 +10,29 @@ import { SafeAreaView, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+
+const mapStateToProps = state => {
+    return {
+      dishes: state.dishes,
+      comments: state.comments,
+      promotions: state.promotions,
+      leaders: state.leaders
+    }
+  }
+
+const mapDispatchToProps = dispatch => ({
+    fetchDishes: () => dispatch(fetchDishes()),
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromos: () => dispatch(fetchPromos()),
+    fetchLeaders: () => dispatch(fetchLeaders()),
+})
 
 const MenuNavigator = createStackNavigator({
     Menu: { screen: Menu,
         navigationOptions: ({ navigation }) => ({
-          headerLeft: <Icon name="menu" size={24} 
+          headerLeft: () => <Icon name="menu" size={24} 
           color= 'white'
           onPress={ () => navigation.toggleDrawer() } />          
         })  
@@ -46,7 +64,7 @@ const HomeNavigator = createStackNavigator({
                 color: "#fff"
             },
             headerTintColor: "#fff",
-            headerLeft: <Icon name="menu" size={24}
+            headerLeft: () => <Icon name="menu" size={24}
                 color='black'
                 onPress={() => navigation.toggleDrawer()} />
         })
@@ -63,7 +81,7 @@ const ContactNavigator = createStackNavigator({
                 color: "#fff"
             },
             headerTintColor: "#fff",
-            headerLeft: <Icon name="menu" size={24}
+            headerLeft: () => <Icon name="menu" size={24}
                 color='white'
                 onPress={() => navigation.toggleDrawer()} />
         })
@@ -79,7 +97,7 @@ const AboutNavigator = createStackNavigator({
                 color: "#fff"
             },
             headerTintColor: "#fff",
-            headerLeft: <Icon name="menu" size={24}
+            headerLeft: () => <Icon name="menu" size={24}
                 color='white'
                 onPress={() => navigation.toggleDrawer()} />
         })
@@ -173,6 +191,14 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
     }));
 
 class Main extends Component {
+
+    componentDidMount() {
+        this.props.fetchDishes();
+        this.props.fetchComments();
+        this.props.fetchPromos();
+        this.props.fetchLeaders();
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -217,4 +243,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
