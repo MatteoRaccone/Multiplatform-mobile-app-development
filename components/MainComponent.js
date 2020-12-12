@@ -4,6 +4,7 @@ import AboutUs from './AboutComponent';
 import Menu from './MenuComponent';
 import ContactUs from './ContactComponent';
 import Dishdetail from './DishdetailComponent';
+import Reservation from './ReservationComponent';
 import { DISHES } from '../shared/dishes';
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { SafeAreaView, createAppContainer } from 'react-navigation';
@@ -52,6 +53,23 @@ const MenuNavigator = createStackNavigator({
         }
     }
 );
+
+const ReservationNavigator = createStackNavigator({
+    Reservation: { screen: Reservation }
+  }, {
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+          backgroundColor: "#512DA8"
+      },
+      headerTitleStyle: {
+          color: "#fff"            
+      },
+      headerTintColor: "#fff",
+      headerLeft: <Icon name="menu" size={24}
+        iconStyle={{ color: 'white' }} 
+        onPress={ () => navigation.navigate('DrawerToggle') } />    
+    })
+});
 
 const HomeNavigator = createStackNavigator({
     Home: { screen: Home }
@@ -168,6 +186,22 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
                 />
             )
         },
+    },
+
+    Reservation:
+        { screen: ReservationNavigator,
+        navigationOptions: {
+            title: 'Reserve Table',
+            drawerLabel: 'Reserve Table',
+            drawerIcon: ({ tintColor, focused }) => (
+            <Icon
+                name='cutlery'
+                type='font-awesome'            
+                size={24}
+                iconStyle={{ color: tintColor }}
+            />
+            ),
+        }
     },
     Contact:
     {
