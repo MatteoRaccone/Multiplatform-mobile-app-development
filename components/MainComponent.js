@@ -5,6 +5,7 @@ import Menu from './MenuComponent';
 import ContactUs from './ContactComponent';
 import Dishdetail from './DishdetailComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 import { DISHES } from '../shared/dishes';
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { SafeAreaView, createAppContainer } from 'react-navigation';
@@ -30,6 +31,7 @@ const mapDispatchToProps = dispatch => ({
     fetchLeaders: () => dispatch(fetchLeaders()),
 })
 
+
 const MenuNavigator = createStackNavigator({
     Menu: { screen: Menu,
         navigationOptions: ({ navigation }) => ({
@@ -53,6 +55,23 @@ const MenuNavigator = createStackNavigator({
         }
     }
 );
+
+const FavoritesNavigator = createStackNavigator({
+    Favorites: { screen: Favorites }
+  }, {
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+          backgroundColor: "#512DA8"
+      },
+      headerTitleStyle: {
+          color: "#fff"            
+      },
+      headerTintColor: "#fff",
+      headerLeft: <Icon name="menu" size={24}
+        iconStyle={{ color: 'white' }} 
+        onPress={ () => navigation.navigate('DrawerToggle') } />    
+    })
+  });
 
 const ReservationNavigator = createStackNavigator({
     Reservation: { screen: Reservation }
@@ -171,6 +190,21 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
             )
         }
     },
+    Favorites:
+        { screen: FavoritesNavigator,
+          navigationOptions: {
+            title: 'My Favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({ tintColor, focused }) => (
+              <Icon
+                name='heart'
+                type='font-awesome'            
+                size={24}
+                iconStyle={{ color: tintColor }}
+              />
+            ),
+          }
+        },
     Menu:
     {
         screen: MenuNavigator,
