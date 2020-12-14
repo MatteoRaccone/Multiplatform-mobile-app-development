@@ -13,6 +13,10 @@ const mapStateToProps = state => {
     }
   }
 
+const mapDispatchToProps = dispatch => ({
+    deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId))
+})
+
 class Favorites extends Component {
 
     static navigationOptions = {
@@ -54,7 +58,8 @@ class Favorites extends Component {
         else {
             return (
                 <FlatList 
-                    data={this.state.dishes.filter(dish => this.props.favorites.some(el => el === dish.id))}
+                    
+                    data={this.props.dishes.dishes.filter(dish => this.props.favorites.some(el => el === dish.id))}
                     renderItem={renderMenuItem}
                     keyExtractor={item => item.id.toString()}
                     />
@@ -64,4 +69,4 @@ class Favorites extends Component {
 }
 
 
-export default connect(mapStateToProps)(Favorites); 
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
