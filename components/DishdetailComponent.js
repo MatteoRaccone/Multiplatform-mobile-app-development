@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, StyleSheet, Button, 
-Alert, PanResponder } from 'react-native';
-import { Card, Icon, Rating, Input} from 'react-native-elements';
+import { Text, View, ScrollView, FlatList, Modal, StyleSheet} from 'react-native';
+import { Card, Icon, Rating, Input, Button } from 'react-native-elements';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite, addComment, postComment } from '../redux/ActionCreators';
+import { postFavorite, postComment } from '../redux/ActionCreators';
 import * as Animatable from 'react-native-animatable';
 
 const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
@@ -15,30 +14,6 @@ const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
     else
         return false;
 }
-
-const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: (e, gestureState) => {
-        return true;
-    },
-    onPanResponderGrant: () => 
-    {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
-
-    onPanResponderEnd: (e, gestureState) => {
-        console.log("pan responder end", gestureState);
-        if (recognizeDrag(gestureState))
-            Alert.alert(
-                'Add Favorite',
-                'Are you sure you wish to add ' + dish.name + ' to favorite?',
-                [
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'OK', onPress: () => {props.favorite ? console.log('Already favorite') : props.onPress()}},
-                ],
-                { cancelable: false }
-            );
-
-        return true;
-    }
-});
 
 const mapStateToProps = state => {
     return {
@@ -49,20 +24,17 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    postFavorite: (dishId) => dispatch(postFavorite(dishId))
+    postFavorite: (dishId) => dispatch(postFavorite(dishId)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 })
 
 function RenderDish(props) {
 
     const dish = props.dish;
-
-    handleViewRef = ref => this.view = ref;
-
     
-    if (dish != null) {
-        return(
-            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}
-            {...panResponder.panHandlers}>
+        if (dish != null) {
+            return(
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
                 <Card
                 featuredTitle={dish.name}
                 image={{uri: baseUrl + dish.image}}>
