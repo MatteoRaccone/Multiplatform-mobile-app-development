@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet, ScrollView, Image } from 'react-native';
 import { Card, Icon, Input, CheckBox } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
-import * as Permission from 'expo-permissions';
+import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { Asset } from 'expo-asset';
+import { Camera } from 'expo-camera';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { baseUrl } from '../shared/baseUrl';
@@ -31,6 +34,37 @@ class LoginTab extends Component {
                     this.setState({remember: true})
                 }
             })
+    }
+
+
+    getImageFromCamera = async () => {
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+            let capturedImage = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+                aspect: [4, 3],
+            });
+            if (!capturedImage.cancelled) {
+                console.log(capturedImage);
+                this.processImage(capturedImage.uri);
+            }
+        }
+
+    }
+
+    processImage = async (imageUri) => {
+        let processedImage = await ImageManipulator.manipulate(
+            imageUri, 
+            [
+                {resize: {width: 400}}
+            ],
+            {format: 'png'}
+        );
+        console.log(processedImage);
+        this.setState({imageUrl: processedImage.uri });
+
     }
 
     static navigationOptions = {
@@ -284,8 +318,8 @@ function myLogin () {
     return (
         <NavigationContainer>
         <Login.Navigator>
-        <Login.Screen name="LoginTab" component={LoginTab} />
-        <Login.Screen name="RegisterTab" component={RegisterTab} />
+        <Login.Screen name="Login" component={LoginTab} />
+        <Login.Screen name="Register" component={RegisterTab} />
         </Login.Navigator>
         </NavigationContainer>
     )
