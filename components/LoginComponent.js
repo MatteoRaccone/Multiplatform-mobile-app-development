@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { View, Button, StyleSheet, ScrollView, Image } from 'react-native';
-import { Card, Icon, Input, CheckBox } from 'react-native-elements';
+import { Icon, Input, CheckBox } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as Permissions from 'expo-permissions';
-import * as Notifications from 'expo-notifications';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { Asset } from 'expo-asset';
-import { Camera } from 'expo-camera';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { baseUrl } from '../shared/baseUrl';
@@ -186,6 +183,17 @@ class RegisterTab extends Component {
         }
 
     }
+
+    getImageFromGallery = async () => {
+        let selectImage = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        if (!selectImage.cancelled) {
+            console.log(selectImage);
+            this.processImage(selectImage.uri);
+        }
+    }
     
     static navigationOptions = {
         title: 'Register',
@@ -219,6 +227,10 @@ class RegisterTab extends Component {
                     <Button
                         title="Camera"
                         onPress={this.getImageFromCamera}
+                        />
+                    <Button
+                        title="Gallery"
+                        onPress={this.getImageFromGallery}
                         />
                 </View>
                 <Input

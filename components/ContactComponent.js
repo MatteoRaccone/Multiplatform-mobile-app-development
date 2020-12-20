@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { Text} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { Card, Button, Icon } from 'react-native-elements';
 import { MailComposer } from 'expo';
